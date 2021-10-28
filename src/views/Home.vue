@@ -1,5 +1,5 @@
 <template>
-  {{ message }}
+  <div class="center">{{ message }}</div>
 </template>
 
 <script lang="ts">
@@ -9,7 +9,7 @@ import {useStore} from 'vuex'
 export default {
   name: "Home",
   setup() {
-    const message = ref('Você não está logado');
+    const message = ref('Bem vindo, faça o login ou cadastre-se!');
 
     const store = useStore();
 
@@ -22,7 +22,7 @@ export default {
 
         const content = await response.json();
 
-        message.value = `Bem-vindo ${content.name}`;
+        message.value = `Bem-vindo ${content.nome}`;
 
         await store.dispatch('setAuth', true);
       } catch (e) {
@@ -38,5 +38,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .center {
+    text-align: center;
+  }
 </style>

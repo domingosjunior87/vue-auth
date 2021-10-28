@@ -145,34 +145,19 @@
         </div>
       </div>
 
-      <div class="row">
-        <div class="col">
-          <div class="mb-3">
-            <label for="password" class="form-label">Senha*</label>
-            <input v-model="data.password" type="password" class="form-control" id="password" required>
-          </div>
-        </div>
-        <div class="col">
-          <div class="mb-3">
-            <label for="confirm_password" class="form-label">Confirme a senha*</label>
-            <input v-model="data.confirm_password" type="password" class="form-control" id="confirm_password" required>
-          </div>
-        </div>
-      </div>
-
-      <button class="w-100 btn btn-lg btn-primary" type="submit">Cadastrar</button>
+      <button class="w-100 btn btn-lg btn-primary" type="submit">Atualizar</button>
     </div> <!-- .container -->
   </form>
 </template>
 
 <script lang="ts">
-import {reactive} from "vue";
+import {onMounted, reactive} from "vue";
 import {useRouter} from "vue-router";
 
 export default {
-  name: "Register",
+  name: "Atualizar",
   setup() {
-    const data = reactive({
+    let data = reactive({
       nome: '',
       data_nascimento: '',
       sexo: '',
@@ -196,14 +181,48 @@ export default {
     const router = useRouter();
 
     const submit = async () => {
-      await fetch('http://localhost:8000/api/register', {
-        method: 'POST',
+      await fetch('http://localhost:8000/api/user', {
+        method: 'PUT',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
+        credentials: 'include'
       });
 
-      await router.push('/login');
+      await router.push('/');
     }
+
+    onMounted(async () => {
+      try {
+        const response = await fetch('http://localhost:8000/api/user', {
+          headers: {'Content-Type': 'application/json'},
+          credentials: 'include'
+        });
+
+        let dados = await response.json();
+
+        data.nome = dados.nome;
+        data.data_nascimento = dados.data_nascimento;
+        data.sexo = dados.sexo;
+        data.cpf = dados.cpf;
+        data.rg = dados.rg;
+        data.telefone = dados.telefone;
+        data.celular = dados.celular;
+        data.identificacao = dados.identificacao;
+        data.cep = dados.cep;
+        data.logradouro = dados.logradouro;
+        data.numero = dados.numero;
+        data.complemento = dados.complemento;
+        data.bairro = dados.bairro;
+        data.cidade = dados.cidade;
+        data.referencia = dados.referencia;
+        data.email = dados.email;
+
+
+      } catch (e) {
+        alert('Não foi possível obter os dados');
+        console.log(e);
+      }
+    });
 
     return {
       data,

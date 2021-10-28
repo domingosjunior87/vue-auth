@@ -9,11 +9,14 @@
             <router-link to="/login" class="nav-link active">Login</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/register" class="nav-link active">Cadastre-se</router-link>
+            <router-link to="/registrar" class="nav-link active">Cadastre-se</router-link>
           </li>
         </ul>
 
         <ul class="navbar-nav me-auto mb-2 mb-md-0" v-if="auth">
+          <li class="nav-item">
+            <router-link to="/atualizar" class="nav-link active">Atualizar dados</router-link>
+          </li>
           <li class="nav-item">
             <router-link to="/login" class="nav-link" @click="logout">Sair</router-link>
           </li>

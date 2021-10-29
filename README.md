@@ -1,24 +1,12 @@
-# vue-auth
+# Aplicação VueJS para cadastro de usuário
 
-## Project setup
-```
-yarn install
-```
+Aplicação de exemplo para consumir API Rest com VueJS para um sistema de autenticação
 
-### Compiles and hot-reloads for development
+## Executar a aplicação
+Você pode testar a aplicação executando os comandos a seguir:
 ```
-yarn serve
+npm install
+npm run serve
 ```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Api Rest
+A API Rest que é consumida por essa aplicação se [encontra aqui](https://github.com/domingosjunior87/ddd-laravel)

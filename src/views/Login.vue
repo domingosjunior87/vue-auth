@@ -30,9 +30,20 @@ export default {
         headers: {'Content-Type': 'application/json'},
         credentials: 'include',
         body: JSON.stringify(data)
-      });
+      })
+          .then(async response => {
+            const resposta = await response.json();
 
-      await router.push('/');
+            if (!response.ok) {
+              const error = (resposta && resposta.message) || response.statusText;
+              return Promise.reject(error);
+            }
+
+            await router.push('/');
+          })
+          .catch(error => {
+            alert(error);
+          });
     }
 
     return {

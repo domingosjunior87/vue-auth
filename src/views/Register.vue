@@ -16,7 +16,14 @@
         <div class="col">
           <div class="mb-3">
             <label for="nascimento" class="form-label">Data de Nascimento*</label>
-            <input v-model="data.data_nascimento" class="form-control" id="nascimento" required>
+            <input
+                v-model="data.data_nascimento"
+                class="form-control"
+                id="nascimento"
+                v-maska="'##/##/####'"
+                placeholder="  /  /"
+                required
+            >
           </div>
         </div>
         <div class="col">
@@ -35,7 +42,7 @@
         <div class="col">
           <div class="mb-3">
             <label for="cpf" class="form-label">CPF*</label>
-            <input v-model="data.cpf" class="form-control" id="cpf" required>
+            <input v-model="data.cpf" class="form-control" id="cpf" v-maska="'###.###.###-##'" required>
           </div>
         </div>
         <div class="col">
@@ -50,13 +57,26 @@
         <div class="col">
           <div class="mb-3">
             <label for="telefone" class="form-label">Telefone</label>
-            <input v-model="data.telefone" class="form-control" id="telefone">
+            <input
+                v-model="data.telefone"
+                class="form-control"
+                id="telefone"
+                v-maska="'(##) ####-####'"
+                placeholder="(99) 9999-9999"
+            >
           </div>
         </div>
         <div class="col">
           <div class="mb-3">
             <label for="celular" class="form-label">Celular*</label>
-            <input v-model="data.celular" class="form-control" id="celular" required>
+            <input
+                v-model="data.celular"
+                class="form-control"
+                id="celular"
+                v-maska="'(##) #####-####'"
+                placeholder="(99) 99999-9999"
+                required
+            >
           </div>
         </div>
       </div>
@@ -75,7 +95,7 @@
         <div class="col">
           <div class="mb-3">
             <label for="cep" class="form-label">CEP*</label>
-            <input v-model="data.cep" class="form-control" id="cep" required>
+            <input v-model="data.cep" class="form-control" id="cep" v-maska="'#####-###'" required>
           </div>
         </div>
       </div>
@@ -196,13 +216,43 @@ export default {
     const router = useRouter();
 
     const submit = async () => {
+      let dados = data;
+
+      dados.cpf = dados.cpf.replaceAll('.','');
+      dados.cpf = dados.cpf.replace('-','');
+
+      dados.cep = dados.cep.replace('-','');
+
+      dados.celular = dados.celular.replace('(','');
+      dados.celular = dados.celular.replace(')','');
+      dados.celular = dados.celular.replace(' ','');
+      dados.celular = dados.celular.replace('-','');
+
+      if (dados.telefone) {
+        dados.telefone = dados.telefone.replace('(','');
+        dados.telefone = dados.telefone.replace(')','');
+        dados.telefone = dados.telefone.replace(' ','');
+        dados.telefone = dados.telefone.replace('-','');
+      }
+
       await fetch('http://localhost:8000/api/register', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
-      });
+      })
+          .then(async response => {
+            const resposta = await response.json();
 
-      await router.push('/login');
+            if (!response.ok) {
+              const error = (resposta && resposta.message) || response.statusText;
+              return Promise.reject(error);
+            }
+
+            await router.push('/login');
+          })
+          .catch(error => {
+            alert(error);
+          });
     }
 
     return {
